@@ -1,6 +1,6 @@
 #!/bin/bash
 
-GITHUB_USER=docker
+GITHUB_USER=databiology
 GITHUB_REPO=machine
 PROJECT_URL="git@github.com:${GITHUB_USER}/${GITHUB_REPO}"
 
@@ -40,7 +40,7 @@ if [[ -z "${VERSION}" ]]; then
   exit 1
 fi
 
-if [[ ! "${VERSION}" =~ ^[0-9]\.[0-9]+(\.[0-9])+(-rc[1-9][0-9]*)?$ ]]; then
+if [[ ! "${VERSION}" =~ ^[0-9]\.[0-9]+(\.[0-9]\.dbe\.[0-9])+(-rc[1-9][0-9]*)?$ ]]; then
   echo "Invalid version. It should look like 0.5.1, 0.6 or 0.5.1-rc2"
   exit 1
 fi
