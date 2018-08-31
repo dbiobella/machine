@@ -340,7 +340,7 @@ func (d *Driver) Start() error {
 
 	instance, err := c.instance()
 	if err != nil {
-		if !strings.Contains(err.Error(), "notFound") {
+		if !isNotFound(err) {
 			return err
 		}
 	}
@@ -396,8 +396,20 @@ func (d *Driver) Remove() error {
 	}
 
 	if err := c.deleteInstance(); err != nil {
-		return err
+		if isNotFound(err) {
+			log.Warn("Remote instance does not exist, proceeding with removing local reference")
+		} else {
+			return err
+		}
 	}
 
-	return c.deleteDisk()
+	if err := c.deleteDisk(); err != nil {
+		if isNotFound(err) {
+			log.Warn("Remote disk does not exist, proceeding")
+		} else {
+			return err
+		}
+	}
+
+	return nil
 }
