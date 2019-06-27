@@ -2,6 +2,7 @@ package azureutil
 
 import (
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/docker/machine/version"
@@ -20,7 +21,7 @@ import (
 // these client configuration in a central place in azure-sdk-for-go.
 
 func oauthClient() autorest.Client {
-	c := autorest.NewClientWithUserAgent(fmt.Sprintf("docker-machine/%s", version.Version))
+	c := autorest.NewClientWithUserAgent(fmt.Sprintf("%s docker-machine/%s", os.Getenv("AZURE_HTTP_USER_AGENT"), version.Version))
 	c.RequestInspector = withInspection()
 	c.ResponseInspector = byInspecting()
 	// TODO set user agent
@@ -29,7 +30,7 @@ func oauthClient() autorest.Client {
 
 func subscriptionsClient(baseURI string) subscriptions.Client {
 	c := subscriptions.NewClientWithBaseURI(baseURI) // used only for unauthenticated requests for generic subs IDs
-	c.Client.UserAgent += fmt.Sprintf(";docker-machine/%s", version.Version)
+	c.Client.UserAgent += fmt.Sprintf(" %s docker-machine/%s", os.Getenv("AZURE_HTTP_USER_AGENT"), version.Version)
 	c.RequestInspector = withInspection()
 	c.ResponseInspector = byInspecting()
 	c.PollingDelay = time.Second * 5
@@ -39,7 +40,7 @@ func subscriptionsClient(baseURI string) subscriptions.Client {
 func (a AzureClient) providersClient() resources.ProvidersClient {
 	c := resources.NewProvidersClientWithBaseURI(a.env.ResourceManagerEndpoint, a.subscriptionID)
 	c.Authorizer = a.auth
-	c.Client.UserAgent += fmt.Sprintf(";docker-machine/%s", version.Version)
+	c.Client.UserAgent += fmt.Sprintf(" %s docker-machine/%s", os.Getenv("AZURE_HTTP_USER_AGENT"), version.Version)
 	c.RequestInspector = withInspection()
 	c.ResponseInspector = byInspecting()
 	c.PollingDelay = time.Second * 5
@@ -49,7 +50,7 @@ func (a AzureClient) providersClient() resources.ProvidersClient {
 func (a AzureClient) resourceGroupsClient() resources.GroupsClient {
 	c := resources.NewGroupsClientWithBaseURI(a.env.ResourceManagerEndpoint, a.subscriptionID)
 	c.Authorizer = a.auth
-	c.Client.UserAgent += fmt.Sprintf(";docker-machine/%s", version.Version)
+	c.Client.UserAgent += fmt.Sprintf(" %s docker-machine/%s", os.Getenv("AZURE_HTTP_USER_AGENT"), version.Version)
 	c.RequestInspector = withInspection()
 	c.ResponseInspector = byInspecting()
 	c.PollingDelay = time.Second * 5
@@ -59,7 +60,7 @@ func (a AzureClient) resourceGroupsClient() resources.GroupsClient {
 func (a AzureClient) securityGroupsClient() network.SecurityGroupsClient {
 	c := network.NewSecurityGroupsClientWithBaseURI(a.env.ResourceManagerEndpoint, a.subscriptionID)
 	c.Authorizer = a.auth
-	c.Client.UserAgent += fmt.Sprintf(";docker-machine/%s", version.Version)
+	c.Client.UserAgent += fmt.Sprintf(" %s docker-machine/%s", os.Getenv("AZURE_HTTP_USER_AGENT"), version.Version)
 	c.RequestInspector = withInspection()
 	c.ResponseInspector = byInspecting()
 	c.PollingDelay = time.Second * 5
@@ -69,7 +70,7 @@ func (a AzureClient) securityGroupsClient() network.SecurityGroupsClient {
 func (a AzureClient) virtualNetworksClient() network.VirtualNetworksClient {
 	c := network.NewVirtualNetworksClientWithBaseURI(a.env.ResourceManagerEndpoint, a.subscriptionID)
 	c.Authorizer = a.auth
-	c.Client.UserAgent += fmt.Sprintf(";docker-machine/%s", version.Version)
+	c.Client.UserAgent += fmt.Sprintf(" %s docker-machine/%s", os.Getenv("AZURE_HTTP_USER_AGENT"), version.Version)
 	c.RequestInspector = withInspection()
 	c.ResponseInspector = byInspecting()
 	c.PollingDelay = time.Second * 5
@@ -79,7 +80,7 @@ func (a AzureClient) virtualNetworksClient() network.VirtualNetworksClient {
 func (a AzureClient) subnetsClient() network.SubnetsClient {
 	c := network.NewSubnetsClientWithBaseURI(a.env.ResourceManagerEndpoint, a.subscriptionID)
 	c.Authorizer = a.auth
-	c.Client.UserAgent += fmt.Sprintf(";docker-machine/%s", version.Version)
+	c.Client.UserAgent += fmt.Sprintf(" %s docker-machine/%s", os.Getenv("AZURE_HTTP_USER_AGENT"), version.Version)
 	c.RequestInspector = withInspection()
 	c.ResponseInspector = byInspecting()
 	c.PollingDelay = time.Second * 5
@@ -89,7 +90,7 @@ func (a AzureClient) subnetsClient() network.SubnetsClient {
 func (a AzureClient) networkInterfacesClient() network.InterfacesClient {
 	c := network.NewInterfacesClientWithBaseURI(a.env.ResourceManagerEndpoint, a.subscriptionID)
 	c.Authorizer = a.auth
-	c.Client.UserAgent += fmt.Sprintf(";docker-machine/%s", version.Version)
+	c.Client.UserAgent += fmt.Sprintf(" %s docker-machine/%s", os.Getenv("AZURE_HTTP_USER_AGENT"), version.Version)
 	c.RequestInspector = withInspection()
 	c.ResponseInspector = byInspecting()
 	c.PollingDelay = time.Second * 5
@@ -99,7 +100,7 @@ func (a AzureClient) networkInterfacesClient() network.InterfacesClient {
 func (a AzureClient) publicIPAddressClient() network.PublicIPAddressesClient {
 	c := network.NewPublicIPAddressesClientWithBaseURI(a.env.ResourceManagerEndpoint, a.subscriptionID)
 	c.Authorizer = a.auth
-	c.Client.UserAgent += fmt.Sprintf(";docker-machine/%s", version.Version)
+	c.Client.UserAgent += fmt.Sprintf(" %s docker-machine/%s", os.Getenv("AZURE_HTTP_USER_AGENT"), version.Version)
 	c.RequestInspector = withInspection()
 	c.ResponseInspector = byInspecting()
 	c.PollingDelay = time.Second * 5
@@ -109,7 +110,7 @@ func (a AzureClient) publicIPAddressClient() network.PublicIPAddressesClient {
 func (a AzureClient) storageAccountsClient() storage.AccountsClient {
 	c := storage.NewAccountsClientWithBaseURI(a.env.ResourceManagerEndpoint, a.subscriptionID)
 	c.Authorizer = a.auth
-	c.Client.UserAgent += fmt.Sprintf(";docker-machine/%s", version.Version)
+	c.Client.UserAgent += fmt.Sprintf(" %s docker-machine/%s", os.Getenv("AZURE_HTTP_USER_AGENT"), version.Version)
 	c.RequestInspector = withInspection()
 	c.ResponseInspector = byInspecting()
 	c.PollingDelay = time.Second * 5
@@ -119,7 +120,7 @@ func (a AzureClient) storageAccountsClient() storage.AccountsClient {
 func (a AzureClient) virtualMachinesClient() compute.VirtualMachinesClient {
 	c := compute.NewVirtualMachinesClientWithBaseURI(a.env.ResourceManagerEndpoint, a.subscriptionID)
 	c.Authorizer = a.auth
-	c.Client.UserAgent += fmt.Sprintf(";docker-machine/%s", version.Version)
+	c.Client.UserAgent += fmt.Sprintf(" %s docker-machine/%s", os.Getenv("AZURE_HTTP_USER_AGENT"), version.Version)
 	c.RequestInspector = withInspection()
 	c.ResponseInspector = byInspecting()
 	c.PollingDelay = time.Second * 5
@@ -129,7 +130,7 @@ func (a AzureClient) virtualMachinesClient() compute.VirtualMachinesClient {
 func (a AzureClient) availabilitySetsClient() compute.AvailabilitySetsClient {
 	c := compute.NewAvailabilitySetsClientWithBaseURI(a.env.ResourceManagerEndpoint, a.subscriptionID)
 	c.Authorizer = a.auth
-	c.Client.UserAgent += fmt.Sprintf(";docker-machine/%s", version.Version)
+	c.Client.UserAgent += fmt.Sprintf(" %s docker-machine/%s", os.Getenv("AZURE_HTTP_USER_AGENT"), version.Version)
 	c.RequestInspector = withInspection()
 	c.ResponseInspector = byInspecting()
 	c.PollingDelay = time.Second * 5
